@@ -22,7 +22,7 @@ internally bzip compressed, then this python script should remove that compressi
     python debz.py <input_filename>  <output_filename>
 
 
-So behold, an example workflow to get Hurricane Harvery over Iowa on January 1.
+So behold, an example workflow to get Hurricane Harvey over Iowa on January 1.
 
     wget https://noaa-nexrad-level2.s3.amazonaws.com/2017/08/25/KBRO/KBRO20170825_195747_V06
     python debz.py KBRO20170825_195747_V06 KBRO20170825_195747_V06.uncompressed
