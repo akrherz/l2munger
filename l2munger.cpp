@@ -247,17 +247,21 @@ time_t targetVolumeTime;
 time_t timeDelta;
 
 time_t volumeTime;
+int    speedFactor;
 
 
 //******************************************************************************
 
 void AdjustW88Time( uint16 &w88_days, uint32 &w88_seconds )
  {
-  time_t seconds;  
+  time_t seconds;
+  time_t innerTimeDelta;  
 
   seconds = W88TimeToTime( w88_days, w88_seconds );
 
-  seconds += timeDelta;
+  innerTimeDelta = seconds - volumeTime;
+
+  seconds += timeDelta - innerTimeDelta + (innerTimeDelta / speedFactor);
 
   TimeToW88Time( w88_days, w88_seconds, seconds );
  }
@@ -417,8 +421,8 @@ bool ProcessPacket()
 //******************************************************************************
 //******************************************************************************
 //
-//              1        2          3         4
-//  l2munger  SSSS  YYYY/MM/DD  HH:MM:SS  source_file
+//              1        2          3     4       5
+//  l2munger  SSSS  YYYY/MM/DD  HH:MM:SS  X  source_file
 //
 //
 //
@@ -430,9 +434,9 @@ int main( int argc, char *argv[] )
 
 
 
-  if( argc != 5 )
+  if( argc != 6 )
    {
-    printf( "Usage: l2munger SSSS  YYYY/MM/DD  HH:MM:SS  source_file\n" );
+    printf( "Usage: l2munger SSSS  YYYY/MM/DD  HH:MM:SS  X  source_file\n" );
     return 0;
    }
 
@@ -440,7 +444,7 @@ int main( int argc, char *argv[] )
   //----------------------- Process command line -------------------------------
 
   int rc;
-  int year, month, day, hour, minute, second;
+  int year, month, day, hour, minute, second, speed;
 
 
   if( strlen( argv[1] ) != 4 )
@@ -467,7 +471,9 @@ int main( int argc, char *argv[] )
     return 0;
    }
 
-  strcpy( szSrc, argv[4] );
+  speed = atoi( argv[4] );
+
+  strcpy( szSrc, argv[5] );
 
 
   //-------------------- Calculate target volume time --------------------------
@@ -497,6 +503,9 @@ int main( int argc, char *argv[] )
    }
 
 
+  speedFactor = speed;
+
+
 
   sprintf( szDst, "%s%.4d%.2d%.2d_%.2d%.2d%.2d", szTargetSite, year, month, day, hour, minute, second );
 
@@ -508,14 +517,14 @@ int main( int argc, char *argv[] )
   src = fopen( szSrc, "rb" );
   if( src == 0 )
    {
-    printf( "*** fopen( %s ) failed!\n", szSrc );
+    printf( "*** fopen( %s ) src failed!\n", szSrc );
     return 0;
    }
 
   dst = fopen( szDst, "wb" );
   if( dst == 0 )
    {
-    printf( "*** fopen( %s ) failed!\n", szDst );
+    printf( "*** fopen( %s ) dst failed!\n", szDst );
     return 0;
    }
 
