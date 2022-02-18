@@ -1,0 +1,22 @@
+name: Build and Test
+on: [push, pull_request]
+jobs:
+  build-linux:
+    name: Python (${{ matrix.PYTHON_VERSION }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        PYTHON_VERSION: ["3.10"]
+    env:
+      PYTHON_VERSION: ${{ matrix.PYTHON_VERSION }}
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build
+      run: |
+        make l2munger
+        curl -o dir.list https://mesonet-nexrad.agron.iastate.edu/level2/raw/KDMX/dir.list
+        curl -o ldmin https://mesonet-nexrad.agron.iastate.edu/level2/raw/KDMX/$(head -1 dir.list | awk '{print $2}')
+        python debz.py ldmin ldmin.uncompress
+        ./l2munger KDMX 2022/02/18 18:00:00 1 ldmin.uncompress
+        ls -l
