@@ -6,12 +6,13 @@ This only rewrites the Volume Scan Time and not the product times :/
 
 """
 from __future__ import print_function
+
 import bz2
-import sys
-import os
-import gzip
-import struct
 import datetime
+import gzip
+import os
+import struct
+import sys
 
 
 def fake(filename, new_stid, new_dt):
@@ -26,8 +27,8 @@ def fake(filename, new_stid, new_dt):
     vol_num = struct.unpack('3s', fobj.read(3))[0]
     date = struct.unpack('>L', fobj.read(4))[0]
     time_ms = struct.unpack('>L', fobj.read(4))[0]
-    stid = struct.unpack('4s', fobj.read(4))[0]
-    orig_dt = datetime.datetime.utcfromtimestamp((date - 1) * 86400. +
+    struct.unpack('4s', fobj.read(4))[0]
+    datetime.datetime.utcfromtimestamp((date - 1) * 86400. +
                                                  time_ms * 0.001)
 
     seconds = (new_dt - datetime.datetime(1970, 1, 1)).total_seconds()

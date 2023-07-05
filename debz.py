@@ -3,10 +3,11 @@
     python debz.py <input_filename> <output_filename>
 """
 from __future__ import print_function
-import struct
+
 import bz2
-import sys
 import os
+import struct
+import sys
 
 
 def main(argv):
