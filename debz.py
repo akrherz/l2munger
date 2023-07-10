@@ -18,14 +18,14 @@ def main(argv):
     oldfn = argv[1]
     newfn = argv[2]
     if os.path.isfile(newfn):
-        print("Error: refusing to overwrite existing file '%s'" % (newfn, ))
+        print("Error: refusing to overwrite existing file '%s'" % (newfn,))
         return
-    output = open(newfn, 'wb')
-    fobj = open(oldfn, 'rb')
+    output = open(newfn, "wb")
+    fobj = open(oldfn, "rb")
 
     output.write(fobj.read(24))
     while True:
-        sz = struct.unpack('>L', fobj.read(4))[0]
+        sz = struct.unpack(">L", fobj.read(4))[0]
         chunk = fobj.read(sz)
         if not chunk:
             break
@@ -37,5 +37,5 @@ def main(argv):
     output.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main(sys.argv)
