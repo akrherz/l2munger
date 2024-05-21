@@ -5,6 +5,7 @@
 This only rewrites the Volume Scan Time and not the product times :/
 
 """
+
 from __future__ import print_function
 
 import bz2

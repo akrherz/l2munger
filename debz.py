@@ -1,7 +1,8 @@
 """This script uncompresses an internally bzip compressed NEXRAD Level II File
 
-    python debz.py <input_filename> <output_filename>
+python debz.py <input_filename> <output_filename>
 """
+
 from __future__ import print_function
 
 import bz2
